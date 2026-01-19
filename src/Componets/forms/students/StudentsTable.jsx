@@ -3,62 +3,95 @@ import "../students/StudentsTable.css";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import UpDownArrow from "../../../assets/dasdhboard/up-down.png";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useLanguage } from "../../../context/LanguageContext";
 
-const students = [
-  {
-    name: "khan Ahmed Khan S/O Rahim Khan",
-    country: "India",
-    dob: "2015-01-28",
-    doa: "2025-07-31",
-    className: "5th",
-  },
-  {
-    name: "zaid Mohammed Faisal S/O Yousuf Faisal",
-    country: "India",
-    dob: "2015-01-28",
-    doa: "2025-07-31",
-    className: "5th",
-  },
-  {
-    name: "John Smith S/O Robert Smith",
-    country: "India",
-    dob: "2015-01-28",
-    doa: "2025-07-31",
-    className: "5th",
-  },
-  {
-    name: "Shaikh Ayesha Shafeeq",
-    country: "India",
-    dob: "2015-01-28",
-    doa: "2025-07-31",
-    className: "5th",
-  },
-  {
-    name: "Ahmed khan sahab",
-    country: "India",
-    dob: "2015-01-28",
-    doa: "2025-07-31",
-    className: "5th",
-  },
-  {
-    name: "Shaikh sadaf anjum",
-    country: "India",
-    dob: "2015-01-28",
-    doa: "2025-07-31",
-    className: "5th",
-  },
-];
+import { studentFormText } from "../../../i18n/studentForm";
+
+
+const API_URL = "https://localhost:7000/api/Student";
+
+
+
+ 
+
 
 const StudentsTable = () => {
+  const [students, setStudents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const navigate = useNavigate();
+
+   const { language } = useLanguage();
+  const t = studentFormText[language];
+
+   useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        const res = await axios.get(API_URL);
+        setStudents(res.data); // API returns array
+      } catch (error) {
+        console.error("Failed to fetch students", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStudents();
+  }, []);
+
+  const formatDate = (date) => {
+  if (!date) return "-";
+  return new Date(date).toISOString().split("T")[0];
+};
+
+const filteredStudents = students.filter((student) => {
+  const search = searchTerm.toLowerCase();
+
+  return (
+    student.nameWithFathersname?.toLowerCase().includes(search) ||
+    student.country?.toLowerCase().includes(search) ||
+    formatDate(student.dateOfBirth).includes(search) ||
+    formatDate(student.dateOfAdmission).includes(search) ||
+    student.class?.toLowerCase().includes(search)
+  );
+});
+
+
+
+
+// EDIT
+const handleEdit = (id) => {
+  navigate(`/student/edit/${id}`);
+};
+
+// DELETE
+const handleDelete = async (id) => {
+  if (!window.confirm("Are you sure you want to delete this student?")) return;
+
+  try {
+    await axios.delete(`${API_URL}/${id}`);
+    // Remove deleted student from UI
+    setStudents((prev) => prev.filter((s) => s.id !== id));
+    alert("Student deleted successfully");
+  } catch (error) {
+    console.error("Delete failed", error);
+    alert("Failed to delete student");
+  }
+};
+
   return (
     <div className="card students-table">
       <div className="container-fluid px-4 py-3">
         {/* Header */}
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <h5 className="fw-semibold">Students List</h5>
+          <h5 className="fw-semibold">{t.StudentsList}</h5>
           <a href="/student-create-form">
             <button className="btn btn-outline-primary btn-sm">
-              Create Student
+             {t.CreateStudent}
             </button>
           </a>
         </div>
@@ -82,11 +115,16 @@ const StudentsTable = () => {
             <button className="btn btn-primary btn-sm">CSV</button>
           </div>
           <div className="d-flex align-items-center gap-2">
-            <span className="fw-semibold">Search:</span>
+            <span className="fw-semibold">{t.Search}</span>
+           
             <input
-              type="text"
-              className="form-control form-control-sm w-64 search-bar"
-            />
+            type="text"
+            className="form-control form-control-sm w-64 search-bar"
+            placeholder={`Search by ${t.name}, ${t.country}, ${t.class}`}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+
           </div>
         </div>
         {/* Table */}
@@ -95,7 +133,7 @@ const StudentsTable = () => {
             <thead className="bg-light">
               <tr>
                 <th className="text-start">
-                  Student Name with Father's Name{" "}
+                   {t.name}
                   <img
                     src={UpDownArrow}
                     alt=""
@@ -103,7 +141,16 @@ const StudentsTable = () => {
                   />
                 </th>
                 <th>
-                  Country{" "}
+
+              {t.country}               
+                 <img
+                    src={UpDownArrow}
+                    alt=""
+                    style={{ width: "14px", height: "14px" }}
+                  />
+                </th>
+                <th>
+                  {t.dob}
                   <img
                     src={UpDownArrow}
                     alt=""
@@ -111,7 +158,7 @@ const StudentsTable = () => {
                   />
                 </th>
                 <th>
-                  Date of Birth{" "}
+                  {t.doa}
                   <img
                     src={UpDownArrow}
                     alt=""
@@ -119,35 +166,34 @@ const StudentsTable = () => {
                   />
                 </th>
                 <th>
-                  Date of Admission{" "}
+                  {t.class}
                   <img
                     src={UpDownArrow}
                     alt=""
                     style={{ width: "14px", height: "14px" }}
                   />
                 </th>
-                <th>
-                  Class{" "}
-                  <img
-                    src={UpDownArrow}
-                    alt=""
-                    style={{ width: "14px", height: "14px" }}
-                  />
-                </th>
-                <th className="text-center">Action</th>
+                <th className="text-center">{t.action}</th>
               </tr>
             </thead>
             <tbody>
-              {students.map((student, index) => (
-                <tr key={index} className="align-middle">
-                  <td className="text-start">{student.name}</td>
-                  <td>{student.country}</td>
-                  <td>{student.dob}</td>
-                  <td>{student.doa}</td>
-                  <td>{student.className}</td>
+              
+                    {filteredStudents.map((student) => (
+
+                  <tr key={student.id} className="align-middle">
+                    <td className="text-start">
+                      {student.nameWithFathersname}
+                    </td>
+                    <td>{student.country}</td>
+                    <td>{formatDate(student.dateOfBirth)}</td>
+                    <td>{formatDate(student.dateOfAdmission)}</td>
+                    <td>{student.class}</td>
+
                   <td className="text-center">
                     <div className="d-flex justify-content-center gap-2">
-                      <button className="btn btn-outline-primary btn-sm">
+                      <button className="btn btn-outline-primary btn-sm"
+                      onClick={() => handleEdit(student.id)}
+                      >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="16"
@@ -163,7 +209,10 @@ const StudentsTable = () => {
                           />
                         </svg>
                       </button>
-                      <button className="btn btn-outline-danger btn-sm">
+                      <button className="btn btn-outline-danger btn-sm"
+                       onClick={() => handleDelete(student.id)}
+                      
+                      >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="16"

@@ -2,25 +2,36 @@ import Bars from "../../assets/dasdhboard/bars.svg";
 import Avatar from "../../assets/dasdhboard/avatar.webp";
 import ChevronDown from "../../assets/dasdhboard/chevron-down.svg";
 import "../header/Header.css";
-import { useState } from "react";
+
+import { useLanguage } from "../../context/LanguageContext";
+import { studentFormText } from "../../i18n/studentForm";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 const Header = () => {
-  
-  const [language, setLanguage] = useState("Urdu");
 
-  const toggleLanguage = () => {
-    setLanguage((prev) => (prev === "Urdu" ? "English" : "Urdu"));
-  };
+  const [students, setStudents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-  const nextLanguage = language === "Urdu" ? "English" : "Urdu";
+
+  const { language, toggleLanguage } = useLanguage();
+
+  const nextLanguage = language === "en" ? "Urdu" : "English";
+
+    const t = studentFormText[language];
+
 
   return (
     <div className="header">
       <header>
         <div className="row align-items-center">
           <div className="col-md-3">
-            <h3>Student Library</h3>
+            <h3>{t.StudentLibrary}</h3>
           </div>
+
+
 
           <div className="col-md-9">
             <div className="row align-items-center">
@@ -28,16 +39,12 @@ const Header = () => {
                 <img src={Bars} alt="Menu" />
               </div>
 
-              <div className="col-md-3">
-                <h2></h2>
-              </div>
+              <div className="col-md-3"></div>
 
               <div className="col-md-7 text-end">
                 <div className="row align-items-center">
                   <div className="col-md-5">
-                    <p className="me-1 mt-2">
-                      10-01-2026 11:05 AM
-                    </p>
+                    <p className="me-1 mt-2">10-01-2026 11:05 AM</p>
                   </div>
 
                   <div className="col">

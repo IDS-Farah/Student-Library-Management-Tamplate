@@ -1,0 +1,52 @@
+export const studentFormText = {
+  en: {
+    title: "Create Student",
+    required: "Required Fields *",
+    name: "Name with Father's Name",
+    country: "Country",
+    dob: "Date of Birth",
+    doa: "Date of Admission",
+    ability: "Ability",
+    class: "Class",
+    leavingDate: "Class Leaving Date",
+    reason: "Reason for Leaving",
+    degreeDate: "Date of Degree",
+    quality: "Quality",
+    create: "Create",
+    back: "Back",
+    action:"Action",
+    StudentsList:"Students List",
+    CreateStudent:" Create Student",
+    Search:"Search",
+    EditStudent:"Edit Student",
+    StudentLibrary:"Student Details",
+     StudentCreateFrom:"Student Create Form",
+       StudentsTable:"Students Table"
+  },
+  ur: {
+    title: "طالب علم بنائیں",
+    required: "مطلوبہ فیلڈز *",
+    name: "نام مع ولدیت",
+    country: "ملک",
+    dob: "تاریخ پیدائش",
+    doa: "تاریخ داخلہ",
+    ability: "قابلیت",
+    class: "جماعت",
+    leavingDate: "تاریخ رخصت",
+    reason: "وجہ",
+    degreeDate: "تاریخ ڈگری",
+    quality: "کیفیت",
+    create: "تخلیق کریں",
+    back: "واپس",
+    action:"عمل",
+    StudentsList:"طلباء کی فہرست",
+    CreateStudent:"نیا طالب علم شامل کریں",
+    Search:"تلاش کریں",
+    EditStudent:"طالب علم میں ترمیم کریں۔",
+    StudentLibrary:"طالب علم کی تفصیلات",
+    StudentCreateFrom:"طالب علم سے تخلیق کریں۔",
+    StudentsTable:"نمونہ طالب علم جدول"
+
+
+  }
+};

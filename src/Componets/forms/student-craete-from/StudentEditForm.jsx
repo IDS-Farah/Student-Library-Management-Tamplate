@@ -1,19 +1,22 @@
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "../../../context/LanguageContext";
 
 import { studentFormText } from "../../../i18n/studentForm";
 
-
 const API_URL = "https://localhost:7000/api/Student";
 
-const StudentCreateFrom = () => {
+const StudentEditForm = () => {
 
-  const { language } = useLanguage();
+   
+
+  const { id } = useParams(); // student id from URL
+  const navigate = useNavigate();
+const { language } = useLanguage();
 const t = studentFormText[language];
-
 
   const [formData, setFormData] = useState({
     nameWithFathersname: "",
@@ -28,6 +31,36 @@ const t = studentFormText[language];
     quality: ""
   });
 
+  /* ================= FETCH STUDENT BY ID ================= */
+  useEffect(() => {
+    const fetchStudent = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/${id}`);
+
+        const data = res.data;
+
+        setFormData({
+          nameWithFathersname: data.nameWithFathersname || "",
+          country: data.country || "",
+          dateOfBirth: data.dateOfBirth?.split("T")[0] || "",
+          dateOfAdmission: data.dateOfAdmission?.split("T")[0] || "",
+          ability: data.ability || "",
+          class: data.class || "",
+          classleavingDate: data.classleavingDate?.split("T")[0] || "",
+          resoneForLeaving: data.resoneForLeaving || "",
+          dateofDigri: data.dateofDigri?.split("T")[0] || "",
+          quality: data.quality || ""
+        });
+      } catch (error) {
+        console.error("Fetch Error:", error);
+        alert("Failed to load student data");
+      }
+    };
+
+    fetchStudent();
+  }, [id]);
+
+  /* ================= HANDLE CHANGE ================= */
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -36,48 +69,49 @@ const t = studentFormText[language];
     }));
   };
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
+  /* ================= UPDATE STUDENT ================= */
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const payload = {
-    NameWithFathersname: formData.nameWithFathersname,
-    Country: formData.country,
-    DateOfBirth: formData.dateOfBirth,
-    DateOfAdmission: formData.dateOfAdmission,
-    Ability: formData.ability || null,
-    Class: formData.class,
-    ClassleavingDate: formData.classleavingDate || null,
-    ResoneForLeaving: formData.resoneForLeaving || null,
-    DateofDigri: formData.dateofDigri || null,
-    Quality: formData.quality || null
-  };
 
-  try {
-    const res = await axios.post(API_URL, payload);
-    alert("Student created successfully");
-    console.log(res.data);
-  } catch (err) {
-    console.error("API Error:", err.response?.data);
-    alert("Validation error");
-  }
+    const payload = {
+  id: Number(id),
+  nameWithFathersname: formData.nameWithFathersname,
+  country: formData.country,
+  dateOfBirth: formData.dateOfBirth,
+  dateOfAdmission: formData.dateOfAdmission,
+  ability: formData.ability || null,
+  class: formData.class,
+  classleavingDate: formData.classleavingDate || null,
+  resoneForLeaving: formData.resoneForLeaving || null,
+  dateofDigri: formData.dateofDigri || null,
+  quality: formData.quality || null
 };
 
+
+   
+
+    try {
+      await axios.put(`${API_URL}/${id}`, payload);
+      alert("Student updated successfully");
+      navigate("/students-table"); // change route if needed
+    } catch (error) {
+      console.error("Update Error:", error.response?.data);
+      alert("Update failed");
+    }
+  };
 
   return (
     <div className="studentCreateFrom">
       <Card>
-        <Card.Body className="card-body">
+        <Card.Body>
           <Form onSubmit={handleSubmit}>
-            <Form.Text>{t.title}</Form.Text>
-
-            <br />
-            <Form.Text className="text-muted">{t.required}</Form.Text>
+            <Form.Text className="text-muted">{t.EditStudent}</Form.Text>
 
             {/* Name & Country */}
             <div className="row mt-3">
-              <div className="col-md-6 col-sm-12">
+              <div className="col-md-6">
                 <Form.Label>{t.name} *</Form.Label>
-
                 <Form.Control
                   name="nameWithFathersname"
                   value={formData.nameWithFathersname}
@@ -86,9 +120,8 @@ const t = studentFormText[language];
                 />
               </div>
 
-              <div className="col-md-6 col-sm-12">
-                <Form.Label>{t.country} *</Form.Label>
-
+              <div className="col-md-6">
+                <Form.Label>{t.country}</Form.Label>
                 <Form.Control
                   name="country"
                   value={formData.country}
@@ -100,8 +133,8 @@ const t = studentFormText[language];
 
             {/* Dates */}
             <div className="row mt-3">
-              <div className="col-md-6 col-sm-12">
-                <Form.Label>{t.dob} *</Form.Label>
+              <div className="col-md-6">
+                <Form.Label>{t.dob}</Form.Label>
                 <Form.Control
                   type="date"
                   name="dateOfBirth"
@@ -111,7 +144,7 @@ const t = studentFormText[language];
                 />
               </div>
 
-              <div className="col-md-6 col-sm-12">
+              <div className="col-md-6">
                 <Form.Label>{t.doa}*</Form.Label>
                 <Form.Control
                   type="date"
@@ -125,7 +158,7 @@ const t = studentFormText[language];
 
             {/* Ability & Class */}
             <div className="row mt-3">
-              <div className="col-md-6 col-sm-12">
+              <div className="col-md-6">
                 <Form.Label>{t.ability}</Form.Label>
                 <Form.Control
                   name="ability"
@@ -134,8 +167,8 @@ const t = studentFormText[language];
                 />
               </div>
 
-              <div className="col-md-6 col-sm-12">
-                <Form.Label>{t.class} *</Form.Label>
+              <div className="col-md-6">
+                <Form.Label>{t.class}</Form.Label>
                 <Form.Control
                   name="class"
                   value={formData.class}
@@ -147,7 +180,7 @@ const t = studentFormText[language];
 
             {/* Leaving Details */}
             <div className="row mt-3">
-              <div className="col-md-6 col-sm-12">
+              <div className="col-md-6">
                 <Form.Label>{t.leavingDate}</Form.Label>
                 <Form.Control
                   type="date"
@@ -157,7 +190,7 @@ const t = studentFormText[language];
                 />
               </div>
 
-              <div className="col-md-6 col-sm-12">
+              <div className="col-md-6">
                 <Form.Label>{t.reason}</Form.Label>
                 <Form.Control
                   name="resoneForLeaving"
@@ -169,7 +202,7 @@ const t = studentFormText[language];
 
             {/* Degree & Quality */}
             <div className="row mt-3">
-              <div className="col-md-6 col-sm-12">
+              <div className="col-md-6">
                 <Form.Label>{t.degreeDate}</Form.Label>
                 <Form.Control
                   type="date"
@@ -179,7 +212,7 @@ const t = studentFormText[language];
                 />
               </div>
 
-              <div className="col-md-6 col-sm-12">
+              <div className="col-md-6">
                 <Form.Label>{t.quality}</Form.Label>
                 <Form.Control
                   name="quality"
@@ -190,9 +223,8 @@ const t = studentFormText[language];
             </div>
 
             {/* Buttons */}
-            <div className="form-buttons text-end mt-4">
-             
-              <button type="submit" className="btn btn-outline-primary">{t.create}</button>
+            <div className="text-end mt-4">
+               <button type="submit" className="btn btn-outline-primary">{t.create}</button>
               <button type="reset" className="btn btn-outline-primary">{t.back}</button>
 
             </div>
@@ -203,4 +235,4 @@ const t = studentFormText[language];
   );
 };
 
-export default StudentCreateFrom;
+export default StudentEditForm;
