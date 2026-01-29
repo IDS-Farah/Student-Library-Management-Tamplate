@@ -46,6 +46,10 @@ const StudentCreateFrom = () => {
     if (!formData.dateOfBirth) return t.dob + " is required";
     if (!formData.dateOfAdmission) return t.doa + " is required";
     if (!formData.class.trim()) return t.class + " is required";
+    if (!formData.classleavingDate.trim()) return t.leavingDate + " is required";
+    if (!formData.classAtLeaving.trim()) return t.classAtTimeOfLeaving + " is required";
+    if (!formData.dateofDigri.trim()) return t.degreeDate + " is required";
+    if (!formData.studentStatus.trim()) return t.studentStatus + " is required";
 
     return null;
   };
@@ -121,7 +125,7 @@ const StudentCreateFrom = () => {
             className="text-gray-800 px-6 py-2 mb-10 rounded-lg no-underline"
           >
             <button type="reset" className="btn btn-primary">
-              <span style={{ letterSpacing: "-4px", marginRight: "6px" }}>
+              <span style={{ letterSpacing: "-4px", marginRight: "7px", marginTop : "-2px" }}>
                 {"<< "}
               </span>
               {t.back}
@@ -138,7 +142,7 @@ const StudentCreateFrom = () => {
           {/* Name & Country */}
           <div className="row mt-3">
             <div className="col-md-6">
-              <Form.Label>{t.nameWithFathersName} *</Form.Label>
+              <Form.Label>{t.nameWithFathersName}*</Form.Label>
               <Form.Control
                 name="nameWithFathersname"
                 value={formData.nameWithFathersname}
@@ -146,7 +150,7 @@ const StudentCreateFrom = () => {
               />
             </div>
             <div className="col-md-6">
-              <Form.Label>{t.country} *</Form.Label>
+              <Form.Label>{t.country}*</Form.Label>
               <Form.Control
                 name="country"
                 value={formData.country}
@@ -158,7 +162,7 @@ const StudentCreateFrom = () => {
           {/* Date of birth & Ability */}
           <div className="row mt-3">
             <div className="col-md-6">
-              <Form.Label>{t.dob} *</Form.Label>
+              <Form.Label>{t.dob}*</Form.Label>
               <Form.Control
                 type="date"
                 name="dateOfBirth"
@@ -179,7 +183,7 @@ const StudentCreateFrom = () => {
           {/* Date Of Admission & Class */}
           <div className="row mt-3">
             <div className="col-md-6">
-              <Form.Label>{t.doa} *</Form.Label>
+              <Form.Label>{t.doa}*</Form.Label>
               <Form.Control
                 type="date"
                 name="dateOfAdmission"
@@ -188,7 +192,7 @@ const StudentCreateFrom = () => {
               />
             </div>
             <div className="col-md-6">
-              <Form.Label>{t.class} *</Form.Label>
+              <Form.Label>{t.class}*</Form.Label>
               <Form.Control
                 name="class"
                 value={formData.class}
@@ -199,7 +203,7 @@ const StudentCreateFrom = () => {
           {/* Leaving Details */}
           <div className="row mt-3">
             <div className="col-md-6 col-sm-12">
-              <Form.Label>{t.leavingDate}</Form.Label>
+              <Form.Label>{t.leavingDate}*</Form.Label>
               <Form.Control
                 type="date"
                 name="classleavingDate"
@@ -227,7 +231,7 @@ const StudentCreateFrom = () => {
               />
             </div>
             <div className="col-md-6 col-sm-12">
-              <Form.Label>{t.degreeDate}</Form.Label>
+              <Form.Label>{t.degreeDate}*</Form.Label>
               <Form.Control
                 type="date"
                 name="dateofDigri"
@@ -247,7 +251,7 @@ const StudentCreateFrom = () => {
               />
             </div>
             <div className="col-md-6">
-              <Form.Label>{t.studentYearRecord} *</Form.Label>
+              <Form.Label>{t.studentYearRecord}*</Form.Label>
               <Form.Control
                 type="date"
                 name="recordYear"
@@ -258,7 +262,7 @@ const StudentCreateFrom = () => {
 
             <div className="row mt-3">
               <div className="col-md-6">
-                <Form.Label>{t.studentStatus}</Form.Label>
+                <Form.Label>{t.studentStatus}*</Form.Label>
                 <div className="d-flex gap-3">
                   <Form.Check
                     type="radio"

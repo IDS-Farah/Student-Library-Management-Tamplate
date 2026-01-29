@@ -112,7 +112,7 @@ const StudentsTable = () => {
               <input
                 type="text"
                 className="form-control form-control-sm w-64 search-bar"
-                placeholder={`Search by ${t.name}, ${t.country}, ${t.class}`}
+                placeholder={`${t.searchBy} ${t.name}, ${t.country}, ${t.class}`}
                 value={searchTerm}
                 onChange={(e) => {
                   setSearchTerm(e.target.value);
@@ -123,10 +123,10 @@ const StudentsTable = () => {
           </div>
 
           <div className=" text-end icons-div">
-            <img src={csvIcon} alt=""  data-toggle="tooltip" data-placement="left" title="convert to  CSV" />
-            <img src={excelIcon} alt=""  data-toggle="tooltip" data-placement="left" title="convert to excel"/>
-            <img src={pdfIcon} alt=""  data-toggle="tooltip" data-placement="left" title="convert to pdf"/>
-            <Link to="/layout/student-create-form"><img src={moreicon} alt=""  data-toggle="tooltip" data-placement="left" title="Add Student" /></Link>
+            <img src={csvIcon} alt=""  data-toggle="tooltip" data-placement="left" title={t.convertToCSV} />
+            <img src={excelIcon} alt=""  data-toggle="tooltip" data-placement="left" title={t.convertToEXL}/>
+            <img src={pdfIcon} alt=""  data-toggle="tooltip" data-placement="left" title={t.convertToPDF}/>
+            <Link to="/layout/student-create-form"><img src={moreicon} alt=""  data-toggle="tooltip" data-placement="left" title={t.addStudent} /></Link>
           </div>
         </div>
 

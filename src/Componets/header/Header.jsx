@@ -23,7 +23,7 @@ const Header = () => {
 
   const { language, toggleLanguage } = useLanguage();
 
-  const nextLanguage = language === "en" ? "Urdu" : "English";
+  const nextLanguage = language === "ur" ? "انگریزی میں تبدیل کریں" : "Swtich To Urdu";
 
   const t = studentFormText[language];
 
@@ -63,7 +63,7 @@ const Header = () => {
     {/* <img src={Bars} alt="Menu" className="menu-icon" /> */}
 
     <button className="btn btn-primary" onClick={toggleLanguage}>
-      Switch to {nextLanguage}
+       {nextLanguage}
     </button>
 
     <div className="dropdown">
