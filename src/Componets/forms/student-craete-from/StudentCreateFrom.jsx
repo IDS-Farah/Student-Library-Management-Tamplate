@@ -7,6 +7,7 @@ import { useLanguage } from "../../../context/LanguageContext";
 import "../student-craete-from/StudentCreateFrom.css";
 import { Link, useNavigate } from "react-router-dom";
 import { studentFormText } from "../../../i18n/studentForm";
+import backArrow from "../../../assets/svg/chevron.png";
 
 const API_URL = "https://localhost:7000/api/Student";
 
@@ -46,8 +47,6 @@ const StudentCreateFrom = () => {
     if (!formData.dateOfBirth) return t.dob + " is required";
     if (!formData.dateOfAdmission) return t.doa + " is required";
     if (!formData.class.trim()) return t.class + " is required";
-    if (!formData.classleavingDate.trim()) return t.leavingDate + " is required";
-    if (!formData.classAtLeaving.trim()) return t.classAtTimeOfLeaving + " is required";
     if (!formData.dateofDigri.trim()) return t.degreeDate + " is required";
     if (!formData.studentStatus.trim()) return t.studentStatus + " is required";
 
@@ -125,8 +124,16 @@ const StudentCreateFrom = () => {
             className="text-gray-800 px-6 py-2 mb-10 rounded-lg no-underline"
           >
             <button type="reset" className="btn btn-primary">
-              <span style={{ letterSpacing: "-4px", marginRight: "7px", marginTop : "-2px" }}>
-                {"<< "}
+              <span>
+                <img
+                  src={backArrow}
+                  alt=""
+                  style={{
+                    width: "12px",
+                    height: "12px",
+                    paddingBottom: "2px",
+                  }}
+                />{" "}
               </span>
               {t.back}
             </button>
@@ -138,7 +145,23 @@ const StudentCreateFrom = () => {
         <div className="w-25"></div>
       </div>
       <div className="form-div">
+        {/* <!-- From Uiverse.io by kamehame-ha -->  */}
         <Form onSubmit={handleSubmit}>
+          {/* <div className="row mt-3">
+            <div className="col-md-6">
+              <div class="coolinput">
+                <label for="input" class="text">
+                  Name:*
+                </label>
+                <input
+                  type="text"
+                  placeholder="Write here..."
+                  name="input"
+                  class="input"
+                />
+              </div>
+            </div>
+          </div> */}
           {/* Name & Country */}
           <div className="row mt-3">
             <div className="col-md-6">
@@ -203,7 +226,7 @@ const StudentCreateFrom = () => {
           {/* Leaving Details */}
           <div className="row mt-3">
             <div className="col-md-6 col-sm-12">
-              <Form.Label>{t.leavingDate}*</Form.Label>
+              <Form.Label>{t.leavingDate}</Form.Label>
               <Form.Control
                 type="date"
                 name="classleavingDate"
@@ -212,7 +235,7 @@ const StudentCreateFrom = () => {
               />
             </div>
             <div className="col-md-6 col-sm-12">
-              <Form.Label>{t.classAtTimeOfLeaving}*</Form.Label>
+              <Form.Label>{t.classAtTimeOfLeaving}</Form.Label>
               <Form.Control
                 name="classAtLeaving"
                 value={formData.classAtLeaving}

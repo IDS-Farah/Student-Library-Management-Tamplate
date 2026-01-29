@@ -90,7 +90,7 @@ const Header = () => {
             width="20"
             height="20"
           />
-          <span className="dropdown-item">Logout</span>
+          <span className="dropdown-item">{t.logout}</span>
         </div>
       </div>
     </div>

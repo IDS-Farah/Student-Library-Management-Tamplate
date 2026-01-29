@@ -6,6 +6,7 @@ import { useLanguage } from "../../../context/LanguageContext";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import "sweetalert2/src/sweetalert2.scss";
 import { studentFormText } from "../../../i18n/studentForm";
+import backArrow from "../../../assets/svg/chevron.png"
 
 const API_URL = "https://localhost:7000/api/Student";
 
@@ -97,16 +98,7 @@ const StudentEditForm = () => {
         <div className="w-25">
           <Link to="/layout/students-table">
             <button type="button" className="btn btn-primary">
-              <span
-                style={{
-                  letterSpacing: "-4px",
-                  marginRight: "7px",
-                  marginTop: "-2px",
-                }}
-              >
-                {"<< "}
-              </span>{" "}
-              {t.back}
+              <span><img src={backArrow} alt="" style={{width: "12px", height : "12px" , paddingBottom : "2px"}} /></span> {t.back}
             </button>
           </Link>
         </div>
