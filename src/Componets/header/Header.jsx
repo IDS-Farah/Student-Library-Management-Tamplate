@@ -1,38 +1,22 @@
-import Bars from "../../assets/dasdhboard/bars.svg";
-import Avatar from "../../assets/dasdhboard/avatar.webp";
-import ChevronDown from "../../assets/dasdhboard/chevron-down.svg";
 import "../header/Header.css";
-
+import Avatar from "../../assets/dasdhboard/avatar.webp";
 
 import { useLanguage } from "../../context/LanguageContext";
 import { studentFormText } from "../../i18n/studentForm";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios";
 
 const Header = () => {
-
-  const [students, setStudents] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
-
-
   const navigate = useNavigate();
-
-
   const { language, toggleLanguage } = useLanguage();
 
-  const nextLanguage = language === "en" ? "Urdu" : "English";
-
   const t = studentFormText[language];
-
+  const nextLanguage = language === "en" ? "Urdu" : "English";
 
   const handleLogout = async () => {
     try {
       await axios.post("https://localhost:7000/api/Account/logout");
-
-    } catch (err) {
+    } catch {
       console.warn("Logout API failed, clearing local data anyway");
     } finally {
       localStorage.removeItem("auth");
@@ -41,63 +25,45 @@ const Header = () => {
   };
 
   return (
-    <div className="header">
-     
-     <header className="app-header">
-  {/* LEFT: Logo */}
-  <div className="header-left">
-    <img
-      src="/images/JMLogo.png"
-      alt="Logo"
-      className="header-logo"
-    />
-  </div>
-
-  {/* CENTER: Student Details / Title */}
-  <div className="header-center">
-    <h5 className="header-title">{t.WebsiteName}</h5>
-  </div>
-
-  {/* RIGHT: Existing Controls */}
-  <div className="header-right">
-    {/* <img src={Bars} alt="Menu" className="menu-icon" /> */}
-
-    <button className="btn btn-primary" onClick={toggleLanguage}>
-      Switch to {nextLanguage}
-    </button>
-
-    <div className="dropdown">
-      <img
-        src={Avatar}
-        width="45"
-        height="45"
-        className="rounded-circle user-avatar"
-        alt="User"
-        onClick={toggleDropdown}
-        style={{ cursor: "pointer" }}
-      />
-
-      <div className={`dropdown-menu ${dropdownOpen ? "show" : ""}`}>
-        <div
-          className="subscription-icons d-flex align-items-center"
-          onClick={handleLogout}
+    <header className="app-header">
+      {/* LEFT */}
+      <div className="header-left">
+        <img
+          src="/images/JMLogo.png"
+          alt="Logo"
+          className="header-logo"
+          onClick={() => window.location.reload()}
           style={{ cursor: "pointer" }}
+        />
+      </div>
+
+
+      {/* CENTER */}
+      <div className="header-center">
+        <h5 className="header-title">{t.WebsiteName}</h5>
+      </div>
+
+      {/* RIGHT */}
+      <div className="header-right">
+        <button
+          className="btn btn-primary lang-btn"
+          onClick={toggleLanguage}
         >
-          <img
-            src="/images/log-out.svg"
-            className="add-icons"
-            alt="Logout"
-            width="20"
-            height="20"
-          />
-          <span className="dropdown-item">Logout</span>
+          {nextLanguage}
+        </button>
+
+        <div className="profile-wrapper">
+          <img src={Avatar} className="user-avatar" alt="User" />
+
+          <div className="dropdown-menu">
+            <div className="dropdown-item-custom" onClick={handleLogout}>
+              <img src="/images/log-out.svg" alt="Logout" width="18" />
+              <span>Logout</span>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</header>
-
-    </div>
+    </header>
   );
 };
 

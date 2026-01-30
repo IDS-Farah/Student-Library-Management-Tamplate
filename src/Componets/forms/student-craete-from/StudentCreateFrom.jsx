@@ -17,19 +17,19 @@ const StudentCreateFrom = () => {
 
   const initialFormState = {
     nameWithFathersname: "",
-    country: "",
-    watan: "",
-    recordYear: "",
-    studentStatus: "NEW",
+    address: "",
+    country: "India",
     dateOfBirth: "",
     dateOfAdmission: "",
     ability: "",
-    class: "",
+    studentClass: "",
     classleavingDate: "",
-    classAtLeaving: "",
     resoneForLeaving: "",
-    dateofDigri: "",
-    quality: "",
+    classLeavingTime: "",
+    recordYear: "",
+    dateOfDegree: "",
+    remark: "",
+    studentStatus: 1,
   };
 
   const [formData, setFormData] = useState(initialFormState);
@@ -41,15 +41,45 @@ const StudentCreateFrom = () => {
 
   /* ================= VALIDATION ================= */
   const validateForm = () => {
-    if (!formData.nameWithFathersname.trim()) return t.name + " is required";
-    if (!formData.country.trim()) return t.country + " is required";
-    if (!formData.watan.trim()) return t.watanAddress + " is required";
-    if (!formData.recordYear) return t.studentYearRecord + " is required";
-    if (!formData.dateOfBirth) return t.dob + " is required";
-    if (!formData.dateOfAdmission) return t.doa + " is required";
-    if (!formData.class.trim()) return t.class + " is required";
+    if (!formData.nameWithFathersname.trim())
+      return `${t.name} is required`;
 
-    return null;
+    if (!formData.address.trim())
+      return `${t.watanAddress} is required`;
+
+    if (!formData.studentClass.trim())
+      return `${t.class} is required`;
+
+    if (!formData.recordYear)
+      return `${t.studentYearRecord} is required`;
+
+    if (!formData.dateOfBirth)
+      return `${t.dob} is required`;
+
+    if (!formData.dateOfAdmission)
+      return `${t.doa} is required`;
+
+    // Student status check
+    if (![1, 2].includes(formData.studentStatus))
+      return `${t.studentStatus} is required`;
+
+    // DOB should be before Admission Date
+    if (
+      new Date(formData.dateOfBirth) >=
+      new Date(formData.dateOfAdmission)
+    ) {
+      return `${t.dob} must be before ${t.doa}`;
+    }
+
+    // If leaving date exists → class at leaving must exist
+    if (
+      formData.classleavingDate &&
+      !formData.classLeavingTime?.trim()
+    ) {
+      return `${t.classAtTimeOfLeaving} is required`;
+    }
+
+    return null; // ✅ valid
   };
 
   /* ================= SUBMIT ================= */
@@ -67,20 +97,20 @@ const StudentCreateFrom = () => {
     }
 
     const payload = {
-      NameWithFathersname: formData.nameWithFathersname,
-      Country: formData.country,
-      Watan: formData.watan,
+      nameWithFathersname: formData.nameWithFathersname,
+      country: formData.country,
+      dateOfBirth: formData.dateOfBirth,
+      dateOfAdmission: formData.dateOfAdmission,
+      ability: formData.ability || null,
+      class: formData.studentClass,
+      classleavingDate: formData.classleavingDate || null,
+      classLeavingTime: formData.classLeavingTime || null,
+      resoneForLeaving: formData.resoneForLeaving || null,
+      dateofDigri: formData.dateOfDegree || null,
+      address: formData.address,
+      studentStatus: formData.studentStatus,
       RecordYear: formData.recordYear,
-      StudentStatus: formData.studentStatus,
-      DateOfBirth: formData.dateOfBirth,
-      DateOfAdmission: formData.dateOfAdmission,
-      Ability: formData.ability || null,
-      Class: formData.class,
-      ClassleavingDate: formData.classleavingDate || null,
-      ClassAtLeaving: formData.classAtLeaving || null,
-      ResoneForLeaving: formData.resoneForLeaving || null,
-      DateofDigri: formData.dateofDigri || null,
-      Quality: formData.quality || null,
+      Remark: formData.remark || null,
     };
 
     try {
@@ -116,189 +146,237 @@ const StudentCreateFrom = () => {
   };
 
   return (
-    <div className="studentCreateFrom pl-2">
-      <div className="heading d-flex bg-primary text-white rounded mb-1">
+    <div className="container-fluid p-2">
+      {/* Header */}
+      <div className="d-flex align-items-center bg-primary text-white rounded mb-2">
         <div className="w-25">
-          <Link
-            to="/layout/students-table"
-            className="text-gray-800 px-6 py-2 mb-10 rounded-lg no-underline"
-          >
-            <button type="reset" className="btn btn-primary">
-              <span style={{ letterSpacing: "-4px", marginRight: "6px" }}>
-                {"<< "}
-              </span>
-              {t.back}
+          <Link to="/layout/students-table" className="text-white text-decoration-none">
+            <button type="button" className="btn btn-primary">
+              &laquo; {t.back}
             </button>
           </Link>
         </div>
-        <div className="text-center w-50 fw-bold pt-2">
-          <p>{t.createStudentForm}</p>
+
+        <div className="w-50 text-center fw-bold pt-2">
+          <p className="mb-0">{t.createStudentForm}</p>
         </div>
+
         <div className="w-25"></div>
       </div>
-      <div className="form-div">
-        <Form onSubmit={handleSubmit}>
-          {/* Name & Country */}
-          <div className="row mt-3">
-            <div className="col-md-6">
-              <Form.Label>{t.name} *</Form.Label>
-              <Form.Control
-                name="nameWithFathersname"
-                value={formData.nameWithFathersname}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="col-md-6">
-              <Form.Label>{t.country} *</Form.Label>
-              <Form.Control
-                name="country"
-                value={formData.country}
-                onChange={handleChange}
-              />
-            </div>
+
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="p-4 rounded bg-white">
+
+        {/* Row 1 */}
+        <div className="row g-3">
+          <div className="col-md-6">
+            <label className="form-label">{t.name} *</label>
+            <input
+              className="form-control"
+              name="nameWithFathersname"
+              value={formData.nameWithFathersname}
+              placeholder="Enter full name"
+              onChange={handleChange}
+              required
+            />
           </div>
 
-          {/* Watan & Record Year */}
-          <div className="row mt-3">
-            <div className="col-md-6">
-              <Form.Label>{t.watanAddress} *</Form.Label>
-              <Form.Control
-                name="watan"
-                value={formData.watan}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="col-md-6">
-              <Form.Label>{t.studentYearRecord} *</Form.Label>
-              <Form.Control
-                type="date"
-                name="recordYear"
-                value={formData.recordYear}
-                onChange={handleChange}
-              />
-            </div>
+          <div className="col-md-6">
+            <label className="form-label">{t.watanAddress} *</label>
+            <input
+              className="form-control"
+              name="address"
+              value={formData.address}
+              placeholder="Enter address"
+              onChange={handleChange}
+              required
+            />
+          </div>
+        </div>
+
+        {/* Row 2 */}
+        <div className="row g-3 mt-2">
+          <div className="col-md-6">
+            <label className="form-label">{t.dob} *</label>
+            <input
+              type="date"
+              className="form-control"
+              name="dateOfBirth"
+              value={formData.dateOfBirth}
+              onChange={handleChange}
+              required
+            />
           </div>
 
-          {/* Dates */}
-          <div className="row mt-3">
-            <div className="col-md-6">
-              <Form.Label>{t.dob} *</Form.Label>
-              <Form.Control
-                type="date"
-                name="dateOfBirth"
-                value={formData.dateOfBirth}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="col-md-6">
-              <Form.Label>{t.doa} *</Form.Label>
-              <Form.Control
-                type="date"
-                name="dateOfAdmission"
-                value={formData.dateOfAdmission}
-                onChange={handleChange}
-              />
-            </div>
+          <div className="col-md-6">
+            <label className="form-label">{t.doa} *</label>
+            <input
+              type="date"
+              className="form-control"
+              name="dateOfAdmission"
+              value={formData.dateOfAdmission}
+              onChange={handleChange}
+              required
+            />
           </div>
 
-          {/* Ability & Class */}
-          <div className="row mt-3">
-            <div className="col-md-6 col-sm-12">
-              <Form.Label>{t.ability}</Form.Label>
-              <Form.Control
-                name="ability"
-                value={formData.ability}
-                onChange={handleChange}
+
+        </div>
+
+        {/* Row 3 */}
+        <div className="row g-3 mt-2">
+          <div className="col-md-6">
+            <label className="form-label">{t.ability}</label>
+            <input
+              className="form-control"
+              name="ability"
+              value={formData.ability}
+              placeholder="Enter ability"
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="col-md-6">
+            <label className="form-label">{t.class} *</label>
+            <input
+              className="form-control"
+              name="studentClass"
+              value={formData.studentClass}
+              placeholder="Enter class"
+              onChange={handleChange}
+              required
+            />
+          </div>
+        </div>
+
+        {/* Row 4 */}
+        <div className="row g-3 mt-2">
+          <div className="col-md-6">
+            <label className="form-label">{t.leavingDate}</label>
+            <input
+              type="date"
+              className="form-control"
+              name="classleavingDate"
+              value={formData.classleavingDate}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="col-md-6">
+            <label className="form-label">{t.resoneForLeaving}</label>
+            <input
+              className="form-control"
+              name="resoneForLeaving"
+              value={formData.resoneForLeaving}
+              placeholder="Reason for leaving"
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+
+        {/* Row 5 */}
+        <div className="row g-3 mt-2">
+          <div className="col-md-6">
+            <label className="form-label">{t.classAtTimeOfLeaving} *</label>
+            <input
+              className="form-control"
+              name="classLeavingTime"
+              value={formData.classLeavingTime}
+              placeholder="Class at time of leaving"
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="col-md-6">
+            <label className="form-label">{t.studentYearRecord} *</label>
+            <input
+              type="date"
+              className="form-control"
+              name="recordYear"
+              value={formData.recordYear}
+              onChange={handleChange}
+              required
+            />
+          </div>
+        </div>
+
+        {/* Row 6 */}
+        <div className="row g-3 mt-2">
+          <div className="col-md-6">
+            <label className="form-label">{t.degreeDate}</label>
+            <input
+              type="date"
+              className="form-control"
+              name="dateOfDegree"
+              value={formData.dateOfDegree}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="col-md-6">
+            <label className="form-label">{t.remark}</label>
+            <input
+              className="form-control"
+              name="remark"
+              value={formData.remark}
+              placeholder="Any remarks"
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+
+        {/* Row 7 - Radio inline */}
+        <div className="row g-3 mt-3">
+          <div className="col-md-6">
+            <label className="form-label d-block">{t.studentStatus}</label>
+
+            <div className="form-check form-check-inline">
+              <input
+                className="form-check-input"
+                type="radio"
+                name="studentStatus"
+                checked={formData.studentStatus === 1}
+                onChange={() =>
+                  setFormData((p) => ({ ...p, studentStatus: 1 }))
+                }
               />
+              <label className="form-check-label" style={{ textDecoration: "none", color: "black" }}>{t.new}</label>
             </div>
-            <div className="col-md-6">
-              <Form.Label>{t.class} *</Form.Label>
-              <Form.Control
-                name="class"
-                value={formData.class}
-                onChange={handleChange}
+
+            <div className="form-check form-check-inline">
+              <input
+                className="form-check-input"
+                type="radio"
+                name="studentStatus"
+                checked={formData.studentStatus === 2}
+                onChange={() =>
+                  setFormData((p) => ({ ...p, studentStatus: 2 }))
+                }
               />
+              <label className="form-check-label" style={{ textDecoration: "none", color: "black" }}>{t.old}</label>
             </div>
           </div>
-          {/* Leaving Details */}
-          <div className="row mt-3">
-            <div className="col-md-6 col-sm-12">
-              <Form.Label>{t.leavingDate}</Form.Label>
-              <Form.Control
-                type="date"
-                name="classleavingDate"
-                value={formData.classleavingDate}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="col-md-6 col-sm-12">
-              <Form.Label>{t.classAtTimeOfLeaving}*</Form.Label>
-              <Form.Control
-                name="classAtLeaving"
-                value={formData.classAtLeaving}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          {/* Degree & Quality */}
-          <div className="row mt-3">
-            <div className="col-md-6 col-sm-12">
-              <Form.Label>{t.degreeDate}</Form.Label>
-              <Form.Control
-                type="date"
-                name="dateofDigri"
-                value={formData.dateofDigri}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="col-md-6 col-sm-12">
-              <Form.Label>{t.remark}</Form.Label>
-              <Form.Control
-                name="quality"
-                value={formData.quality}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          {/* OLD / NEW */}
-          <div className="row mt-3">
-            <div className="col-md-6">
-              <Form.Label>{t.studentStatus}</Form.Label>
-              <div className="d-flex gap-3">
-                <Form.Check
-                  type="radio"
-                  label={t.new}
-                  name="studentStatus"
-                  value="NEW"
-                  checked={formData.studentStatus === "NEW"}
-                  onChange={handleChange}
-                />
-                <Form.Check
-                  type="radio"
-                  label={t.old}
-                  name="studentStatus"
-                  value="OLD"
-                  checked={formData.studentStatus === "OLD"}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-          </div>
-          {/* Buttons */}
-          <div className="form-buttons text-end mt-4">
-            <button
-              type="button"
-              className="btn btn-outline-secondary me-2"
-              onClick={handleClearForm}
-            >
-              {t.clear}
-            </button>
-            <button type="submit" className="btn btn-outline-primary">
-              {t.create}
-            </button>
-          </div>
-        </Form>
-      </div>
+        </div>
+
+        {/* Buttons */}
+        <div className="d-flex justify-content-end gap-2 mt-4">
+          <button
+            type="button"
+            className="btn btn-outline-secondary"
+            onClick={handleClearForm}
+          >
+            {t.clear}
+          </button>
+
+          <button type="submit" className="btn btn-primary">
+            {t.create}
+          </button>
+        </div>
+
+      </form>
+
+
     </div>
   );
 };

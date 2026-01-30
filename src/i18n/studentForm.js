@@ -22,10 +22,11 @@ export const studentFormText = {
     WebsiteName: "Jamia Islamia Kashiful Uloom - Aurangabad Maharashtra",
     StudentCreateFrom: "Create Student",
     StudentsTable: "Students List",
-    watanAddress: "Watan / Address",
+    watanAddress: "Country / Address",
     studentYearRecord: "Student Year Record",
     studentStatus: "Student Status",
     classAtTimeOfLeaving: "Class at Time of Leaving",
+    resoneForLeaving: "Resone For Leaving",
     clear: "Clear",
     show: "Show",
     enteries: "Enteries",
@@ -81,3 +82,5 @@ export const studentFormText = {
 
   }
 };
+
+
