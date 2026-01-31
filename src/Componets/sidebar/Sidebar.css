@@ -15,13 +15,13 @@
   margin: 0;
 }
 
-/* Links */
-.sidebar-link {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 20px;
-  margin: 6px 12px;
+.sidebar ul li {
+  width: 95%;
+  margin: auto;
+
+  border: 1px solid gainsboro;
+  /* padding: 5px; */
+  margin-block: 8px;
   border-radius: 10px;
   color: #374151;
   text-decoration: none;

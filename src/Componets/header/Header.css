@@ -16,12 +16,15 @@
 .header-left {
   display: flex;
   align-items: center;
+  width: 20%;
+  border-right: 1px solid gainsboro;
 }
 
 .header-logo {
-  height: 45px;
-  border-radius: 50%;
-  cursor: pointer;
+  padding: 6px;
+  height: 60px;
+  object-fit: contain;
+  border-radius: 30px;
 }
 
 /* CENTER */
@@ -40,7 +43,13 @@
 .header-right {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
+  width: 20%;
+  padding: 6px;
+  justify-content: flex-end;
+}
+.header-right button {
+  font-size: 14px !important;
 }
 
 .lang-btn {

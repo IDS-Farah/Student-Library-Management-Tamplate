@@ -7,22 +7,18 @@ import Button from "react-bootstrap/Button";
 
 const Layout = () => {
   return (
-  <div className="container-fluid p-0">
-  {/* Header */}
-  <Header />
-
-  {/* Main Layout */}
-  <div className="row g-0">
-    {/* Sidebar */}
-    <div className="col-12 col-md-3 col-lg-2">
-      <Sidebar />
-    </div>
-
-    {/* Content */}
-    <div className="col-12 col-md-9 col-lg-10">
-      <main className="px-3 ps-5 pt-3">
-        <Outlet />
-      </main>
+    <div className='flex flex-col  overflow-x-hidden "overflow-y-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"'>
+      <Header />
+      <div className="container-fluid w-100 d-flex">
+        <div className="left-side">
+          <Sidebar />
+        </div>
+        <div className="right-side">
+          <main className=" overflow-x-hidden">
+            <Outlet />
+          </main>
+        </div>
+      </div>
     </div>
   </div>
 </div>

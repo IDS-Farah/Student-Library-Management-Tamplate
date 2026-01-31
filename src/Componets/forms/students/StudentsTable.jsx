@@ -22,7 +22,7 @@ const StudentsTable = () => {
 
   // 🔹 pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 50;
+  const rowsPerPage = 10;
 
   const navigate = useNavigate();
   const { language } = useLanguage();
@@ -102,7 +102,7 @@ const StudentsTable = () => {
       <div className="container-fluid px-4 py-3">
         {/* Header */}
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <div className="w-45">
+          <div className="w-20">
             <h5 className="fw-semibold">{t.StudentsList}</h5>
           </div>
 
@@ -111,8 +111,8 @@ const StudentsTable = () => {
               <span className="fw-semibold">{t.Search}</span>
               <input
                 type="text"
-                className="form-control form-control-sm w-64 search-bar"
-                placeholder={`Search by ${t.name}, ${t.country}, ${t.class}`}
+                className="form-control form-control-sm w-65 search-bar"
+                placeholder={`${t.searchBy} ${t.name}, ${t.country}, ${t.class}`}
                 value={searchTerm}
                 onChange={(e) => {
                   setSearchTerm(e.target.value);
@@ -123,10 +123,10 @@ const StudentsTable = () => {
           </div>
 
           <div className=" text-end icons-div">
-            <img src={csvIcon} alt=""  data-toggle="tooltip" data-placement="left" title="convert to  CSV" />
-            <img src={excelIcon} alt=""  data-toggle="tooltip" data-placement="left" title="convert to excel"/>
-            <img src={pdfIcon} alt=""  data-toggle="tooltip" data-placement="left" title="convert to pdf"/>
-            <Link to="/layout/student-create-form"><img src={moreicon} alt=""  data-toggle="tooltip" data-placement="left" title="Add Student" /></Link>
+            <img src={csvIcon} alt=""  data-toggle="tooltip" data-placement="left" title={t.convertToCSV} />
+            <img src={excelIcon} alt=""  data-toggle="tooltip" data-placement="left" title={t.convertToEXL}/>
+            <img src={pdfIcon} alt=""  data-toggle="tooltip" data-placement="left" title={t.convertToPDF}/>
+            <Link to="/layout/student-create-form"><img src={moreicon} alt=""  data-toggle="tooltip" data-placement="left" title={t.addStudent} /></Link>
           </div>
         </div>
 
@@ -138,7 +138,7 @@ const StudentsTable = () => {
             <thead className="bg-light">
               <tr>
                 <th>
-                  {t.name} <img src={UpDownArrow} width="14" />
+                  {t.nameWithFathersName} <img src={UpDownArrow} width="14" />
                 </th>
                 <th>
                   {t.country} <img src={UpDownArrow} width="14" />
@@ -187,7 +187,7 @@ const StudentsTable = () => {
           <div className="row p-0 m-0">
             <div className="col pagination pt-4">
               <p>
-                {t.show} : <input type="number" value="50" readOnly /> {t.enteries}{" "}
+                {t.show} : <input type="number" value={rowsPerPage} readOnly /> {t.enteries}{" "}
                 {startEntry} {t.to} {endEntry} {t.rowOutOf} <b>{totalRecords}</b>
               </p>
             </div>
